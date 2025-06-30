@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { Button, TextField, Container, Typography, Paper, Snackbar, Alert } from '@mui/material';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+if (!API_URL) {
+  throw new Error("La variable de entorno REACT_APP_API_URL no está definida");
+}
+
+
 const DeliveryExpenses = () => {
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState('');
@@ -12,7 +19,7 @@ const DeliveryExpenses = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:5000/api/expenses/gastos', {
+      const response = await fetch(`${API_URL}/api/expenses/gastos`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
