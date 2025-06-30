@@ -6,9 +6,13 @@ import LogoutIcon from '@mui/icons-material/Logout';
 const DashboardPanel = () => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // Lógica de logout, limpiar sesión, tokens, etc.
-window.location.href = '`${process.env.REACT_APP_API_URL}/login';
+ const handleLogout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('role');
+  localStorage.removeItem('repartidor');
+
+  navigate('/'); // Esto te lleva al login en React Router
+
   };
 
   // Lista de botones excepto logout
