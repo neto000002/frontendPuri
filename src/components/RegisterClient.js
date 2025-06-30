@@ -11,7 +11,12 @@ const routes = [
 ];
 
 // Obtén la URL base de la API desde la variable de entorno (asegúrate de definirla en Render)
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+const API_URL = process.env.REACT_APP_API_URL;
+
+if (!API_URL) {
+  throw new Error("La variable de entorno REACT_APP_API_URL no está definida");
+}
+
 
 const RegisterClient = () => {
   const navigate = useNavigate();
