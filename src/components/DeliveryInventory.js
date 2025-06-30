@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { Pencil, Check } from "lucide-react";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+if (!API_URL) {
+  throw new Error("La variable de entorno REACT_APP_API_URL no está definida");
+}
+
+
 const Inventory = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,7 +38,7 @@ const Inventory = () => {
   useEffect(() => {
     const fetchInventory = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/inventory");
+        const response =await fetch(`${API_URL}/api/inventory`);
         const data = await response.json();
         setItems(data);
       } catch (error) {
@@ -50,7 +57,7 @@ const Inventory = () => {
 
   const handleSave = async (name) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/inventory/${name}`, {
+      const res = await fetch(`${API_URL}/api/inventory/${name}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ quantity: newQuantity }),
