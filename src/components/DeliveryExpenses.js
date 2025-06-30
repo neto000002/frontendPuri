@@ -24,7 +24,7 @@ const DeliveryExpenses = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ description, amount }),
+        body: JSON.stringify({ description, amount: Number(amount) }),
       });
 
       if (!response.ok) {
