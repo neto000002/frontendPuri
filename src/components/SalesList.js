@@ -5,7 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
+const API_URL = process.env.REACT_APP_API_URL;
 
+if (!API_URL) {
+  throw new Error("La variable de entorno REACT_APP_API_URL no está definida");
+}
 
 const SalesList = ({ modoAdmin = false }) => {
   const navigate = useNavigate();
@@ -33,7 +37,7 @@ const SalesList = ({ modoAdmin = false }) => {
     const fetchSales = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/sales/list', {
+        const response = await fetch(`${API_URL}/api/sales/list`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -56,7 +60,7 @@ const SalesList = ({ modoAdmin = false }) => {
 
     const fetchDeliverymen = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/deliverymen/list');
+        const response = await fetch(`${API_URL}/api/deliverymen/list`);
         const data = await response.json();
         setDeliverymen(data);
       } catch (error) {
@@ -74,7 +78,7 @@ const SalesList = ({ modoAdmin = false }) => {
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/expenses/gastos');
+        const response = await fetch(`${API_URL}/api/expenses/gastos`);
         const data = await response.json();
         setExpenses(data);
       } catch (error) {
@@ -112,7 +116,7 @@ const SalesList = ({ modoAdmin = false }) => {
 
   const handleUpdateDeliveryman = async (saleId, newDeliveryman) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/sales/update-deliveryman/${saleId}`, {
+      const response = await fetch(`${API_URL}/api/sales/update-deliveryman/${saleId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -149,7 +153,7 @@ const SalesList = ({ modoAdmin = false }) => {
   
       if (pagoTodo) {
         // Pago completo: enviamos la cantidad total
-        const response = await fetch(`http://localhost:5000/api/sales/mark-partial-paid/${sale.id}`, {
+        const response = await fetch(`${API_URL}/api/sales/mark-partial-paid/${sale.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -183,7 +187,7 @@ const SalesList = ({ modoAdmin = false }) => {
           return;
         }
   
-        const response = await fetch(`http://localhost:5000/api/sales/mark-partial-paid/${sale.id}`, {
+        const response = await fetch(`${API_URL}/api/sales/mark-partial-paid/${sale.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -228,7 +232,7 @@ const SalesList = ({ modoAdmin = false }) => {
   const handleMarkSold = async (saleId) => {
     try {
       // Marcar como vendida (cambiar fiado a false)
-      const response = await fetch(`http://localhost:5000/api/sales/mark-sold/${saleId}`, {
+      const response = await fetch(`${API_URL}/api/sales/mark-sold/${saleId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -286,7 +290,7 @@ const SalesList = ({ modoAdmin = false }) => {
       } else {*/
         // Si no está marcado como fiado, lo marcamos
             // Marcar la venta como fiado
-            const response = await fetch(`http://localhost:5000/api/sales/mark-fiado/${saleId}`, {
+            const response = await fetch(`${API_URL}/api/sales/mark-fiado/${saleId}`, {
               method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
@@ -305,7 +309,7 @@ const SalesList = ({ modoAdmin = false }) => {
             });
         
             // Llamar a la ruta para mover los fiados a delivery_fiados
-            const moveFiadoResponse = await fetch('http://localhost:5000/api/sales/mover-fiados', {
+            const moveFiadoResponse = await fetch(`${API_URL}/api/sales/mover-fiados`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -456,7 +460,7 @@ const SalesList = ({ modoAdmin = false }) => {
   
     try {
       // Enviar todo en una sola petición
-      const response = await fetch("http://localhost:5000/api/reports/save-report", {
+     const response = await fetch(`${API_URL}/api/reports/save-report`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pdfBase64, filename, reportData: reportText }),
@@ -465,12 +469,12 @@ const SalesList = ({ modoAdmin = false }) => {
       if (!response.ok) throw new Error("Error al guardar el reporte en la base de datos");
   
       // Borrar ventas y gastos después de guardar
-      await fetch("http://localhost:5000/api/sales/delete-all", {
+      await fetch(`${API_URL}/api/sales/delete-all`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
   
-      await fetch("http://localhost:5000/api/expenses/delete-all", {
+      await fetch(`${API_URL}/api/expenses/delete-all`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
