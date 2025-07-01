@@ -1,9 +1,11 @@
 import React from 'react';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, useMediaQuery, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const DeliveryPanel = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // detecta pantallas pequeñas
 
   const handleLogout = () => {
     localStorage.removeItem('token'); // o como guardes el token
@@ -23,6 +25,7 @@ const DeliveryPanel = () => {
     <div
       style={{
         display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
         height: '100vh',
         width: '100vw',
         backgroundImage: `url('/images/logoPuri.jpg')`,
@@ -34,11 +37,14 @@ const DeliveryPanel = () => {
       {/* Panel izquierdo con botones */}
       <div
         style={{
-          width: '30%',
+          width: isMobile ? '100%' : '30%',
+          minHeight: isMobile ? 'auto' : '100vh',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between', // 👈 Esto distribuye espacio: botones arriba, logout abajo
-          padding: '5% 0 5% 5%',
+          justifyContent: 'space-between', // botones arriba, logout abajo
+          padding: isMobile ? '20px' : '5% 0 5% 5%',
+          boxSizing: 'border-box',
+          backgroundColor: 'rgba(0,0,0,0.5)', // para que se vea mejor el texto en móvil
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -47,19 +53,20 @@ const DeliveryPanel = () => {
               color: 'white',
               textShadow: '2px 2px 4px rgba(0,0,0,0.7)',
               marginBottom: '15px',
+              textAlign: 'center',
             }}
           >
             Panel de Repartidores
           </h2>
 
-          <Grid container spacing={2} justifyContent="flex-start">
+          <Grid container spacing={2} justifyContent="center">
             {buttons.map((item, index) => (
-              <Grid item xs={6} key={index} style={{ display: 'flex', justifyContent: 'center' }}>
+              <Grid item xs={6} sm={12} key={index} style={{ display: 'flex', justifyContent: 'center' }}>
                 <Button
                   onClick={() => navigate(item.path)}
                   variant="contained"
                   style={{
-                    width: '150px',
+                    width: isMobile ? '90%' : '150px',
                     height: '150px',
                     borderRadius: '20px',
                     color: 'white',
@@ -78,18 +85,18 @@ const DeliveryPanel = () => {
         </div>
 
         {/* Botón cerrar sesión */}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: isMobile ? '20px' : '30px' }}>
           <Button
             onClick={handleLogout}
             variant="contained"
             style={{
-              marginTop: '30px',
               backgroundColor: '#dc3545',
               color: 'white',
               borderRadius: '20px',
               padding: '10px 20px',
               fontWeight: 'bold',
               textTransform: 'none',
+              width: isMobile ? '90%' : 'auto',
             }}
           >
             Cerrar sesión
