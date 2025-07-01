@@ -5,6 +5,12 @@ import {
   DialogTitle, DialogContent, DialogActions, TextField
 } from '@mui/material';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+if (!API_URL) {
+  throw new Error("La variable de entorno REACT_APP_API_URL no está definida");
+}
+
 const DeliveryFiados = ({ modoAdmin = false }) => {
   const [fiados, setFiados] = useState([]);
   const [pagados, setPagados] = useState([]);
@@ -20,12 +26,12 @@ const DeliveryFiados = ({ modoAdmin = false }) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const resFiados = await fetch('http://localhost:5000/api/sales/delivery-fiados');
+        const resFiados = await fetch(`${API_URL}/api/sales/delivery-fiados`);
         if (!resFiados.ok) throw new Error('Error al obtener las ventas fiadas');
         const dataFiados = await resFiados.json();
         setFiados(dataFiados);
 
-        const resPagados = await fetch('http://localhost:5000/api/fiados/fiados_pagados');
+       const resPagados = await fetch(`${API_URL}/api/fiados/fiados_pagados`);
         if (!resPagados.ok) throw new Error('Error al obtener las ventas pagadas');
         const dataPagados = await resPagados.json();
         setPagados(dataPagados);
@@ -129,7 +135,7 @@ const DeliveryFiados = ({ modoAdmin = false }) => {
       );
 
       for (const venta of ventasCliente) {
-        const res = await fetch('http://localhost:5000/api/fiados/fiado-pagado', {
+        const res = await fetch(`${API_URL}/api/fiados/fiado-pagado`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -207,7 +213,7 @@ const DeliveryFiados = ({ modoAdmin = false }) => {
   console.log("Payload que se envía al backend:", payload);
 
   try {
-    const res = await fetch('http://localhost:5000/api/fiados/fiado-parcial', {
+    const res = await fetch(`${API_URL}/api/fiados/fiado-parcial`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -219,11 +225,11 @@ const DeliveryFiados = ({ modoAdmin = false }) => {
     }
 
     // Actualizar listas de fiados y pagados
-    const resFiados = await fetch('http://localhost:5000/api/sales/delivery-fiados');
+    const resFiados = await fetch(`${API_URL}/api/sales/delivery-fiados`);
     const dataFiados = await resFiados.json();
     setFiados(dataFiados);
 
-    const resPagados = await fetch('http://localhost:5000/api/fiados/fiados_pagados');
+    const resPagados = await fetch(`${API_URL}/api/fiados/fiados_pagados`);
     const dataPagados = await resPagados.json();
     setPagados(dataPagados);
 
