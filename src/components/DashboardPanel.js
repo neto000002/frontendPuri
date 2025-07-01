@@ -1,21 +1,20 @@
 import React from 'react';
-import { Button, Grid, IconButton, Tooltip } from '@mui/material';
+import { Button, Grid, IconButton, Tooltip, useMediaQuery, useTheme } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 const DashboardPanel = () => {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
- const handleLogout = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('role');
-  localStorage.removeItem('repartidor');
-
-  navigate('/'); // Esto te lleva al login en React Router
-
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('repartidor');
+    navigate('/');
   };
 
-  // Lista de botones excepto logout
   const buttons = [
     { path: '/register-deliveryman', label: 'Registrar Repartidor' },
     { path: '/sales', label: 'Ventas' },
@@ -27,6 +26,7 @@ const DashboardPanel = () => {
     <div
       style={{
         display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
         height: '100vh',
         width: '100vw',
         backgroundImage: `url('/images/logoPuri.jpg')`,
@@ -38,12 +38,15 @@ const DashboardPanel = () => {
       {/* Sección izquierda para los botones */}
       <div
         style={{
-          width: '30%',
+          width: isMobile ? '100%' : '30%',
+          minHeight: isMobile ? 'auto' : '100vh',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          paddingLeft: '5%',
+          padding: isMobile ? '20px' : '5% 0 5% 5%',
+          boxSizing: 'border-box',
+          backgroundColor: isMobile ? 'rgba(0,0,0,0.5)' : 'transparent',
         }}
       >
         <h2
@@ -51,16 +54,18 @@ const DashboardPanel = () => {
             color: 'white',
             textShadow: '2px 2px 4px rgba(0,0,0,0.7)',
             marginBottom: '15px',
+            textAlign: 'center',
           }}
         >
           Panel de Administración
         </h2>
 
-        <Grid container spacing={2} justifyContent="flex-start">
+        <Grid container spacing={2} justifyContent="center">
           {buttons.map((item, index) => (
             <Grid
               item
               xs={6}
+              sm={12}
               key={index}
               style={{ display: 'flex', justifyContent: 'center' }}
             >
@@ -68,7 +73,7 @@ const DashboardPanel = () => {
                 onClick={() => navigate(item.path)}
                 variant="contained"
                 style={{
-                  width: '150px',
+                  width: isMobile ? '90%' : '150px',
                   maxWidth: '300px',
                   height: '150px',
                   borderRadius: '20px',
@@ -85,21 +90,23 @@ const DashboardPanel = () => {
             </Grid>
           ))}
 
-          {/* Botón cerrar sesión debajo de Reportes */}
+          {/* Botón cerrar sesión */}
           <Grid
             item
             xs={6}
+            sm={12}
             style={{
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
+              marginTop: isMobile ? '20px' : 0,
             }}
           >
             <Tooltip title="Cerrar sesión">
               <IconButton
                 onClick={handleLogout}
                 style={{
-                  width: '150px',
+                  width: isMobile ? '90%' : '150px',
                   height: '150px',
                   borderRadius: '20px',
                   color: 'white',
@@ -112,17 +119,18 @@ const DashboardPanel = () => {
             </Tooltip>
           </Grid>
 
-          {/* Botón Inventario debajo de cerrar sesión */}
+          {/* Botón Inventario */}
           <Grid
             item
             xs={6}
+            sm={12}
             style={{ display: 'flex', justifyContent: 'center' }}
           >
             <Button
               onClick={() => navigate('/inventory')}
               variant="contained"
               style={{
-                width: '150px',
+                width: isMobile ? '90%' : '150px',
                 maxWidth: '300px',
                 height: '150px',
                 borderRadius: '20px',
