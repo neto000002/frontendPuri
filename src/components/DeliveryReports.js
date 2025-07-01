@@ -4,6 +4,12 @@ import {
   Paper, Typography, CircularProgress
 } from '@mui/material';
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+if (!API_URL) {
+  throw new Error("La variable de entorno REACT_APP_API_URL no está definida");
+}
+
 const DeliveryReports = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +17,7 @@ const DeliveryReports = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/reports/get-reports');
+        const response = await fetch(`${API_URL}/api/reports/get-reports`);
         const data = await response.json();
         setReports(data);
       } catch (error) {
