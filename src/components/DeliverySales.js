@@ -10,6 +10,12 @@ const routes = [
   { name: 'Jueves', streets: ['La Toma'] }
 ];
 
+const API_URL = process.env.REACT_APP_API_URL;
+
+if (!API_URL) {
+  throw new Error("La variable de entorno REACT_APP_API_URL no está definida");
+}
+
 const DeliverySales = () => {
   const navigate = useNavigate();
   const [route, setRoute] = useState('');
@@ -31,7 +37,7 @@ const DeliverySales = () => {
   useEffect(() => {
     const fetchRepartidores = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/deliverymen/list');
+        const response = await fetch(`${API_URL}/api/deliverymen/list`);
         const data = await response.json();
         setRepartidores(data);
       } catch (error) {
@@ -46,7 +52,7 @@ const DeliverySales = () => {
     if (route) {
       const fetchClients = async () => {
         try {
-          const response = await fetch(`http://localhost:5000/api/clients/by-route/${route}`);
+          const response = await fetch(`${API_URL}/api/clients/by-route/${route}`);
           const data = await response.json();
           setClients(data);
           setFilteredClients(data);
@@ -97,7 +103,7 @@ const DeliverySales = () => {
     console.log("Datos antes de enviar:", saleData); 
 
     try {
-      const response = await fetch('http://localhost:5000/api/sales', {
+      const response = await fetch(`${API_URL}/api/sales`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
