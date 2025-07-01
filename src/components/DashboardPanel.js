@@ -26,6 +26,7 @@ const DashboardPanel = () => {
     <div
       style={{
         display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
         height: '100vh',
         width: '100vw',
         backgroundImage: `url('/images/logoPuri.jpg')`,
@@ -38,110 +39,113 @@ const DashboardPanel = () => {
       <div
         style={{
           width: isMobile ? '100%' : '30%',
+          minHeight: isMobile ? 'auto' : '100vh',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between', // botones arriba, logout abajo en desktop
+          alignItems: 'center',
+          justifyContent: 'center',
           padding: isMobile ? '20px' : '5% 0 5% 5%',
           boxSizing: 'border-box',
           backgroundColor: isMobile ? 'rgba(0,0,0,0.5)' : 'transparent',
         }}
       >
-        <div style={{ textAlign: 'center' }}>
-          <h2
-            style={{
-              color: 'white',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.7)',
-              marginBottom: '15px',
-            }}
-          >
-            Panel de Administración
-          </h2>
+        <h2
+          style={{
+            color: 'white',
+            textShadow: '2px 2px 4px rgba(0,0,0,0.7)',
+            marginBottom: '15px',
+            textAlign: 'center',
+          }}
+        >
+          Panel de Administración
+        </h2>
 
-          <Grid
-            container
-            spacing={2}
-            justifyContent={isMobile ? 'center' : 'flex-start'}
-          >
-            {buttons.map((item, index) => (
-              <Grid
-                item
-                xs={isMobile ? 12 : 6}
-                key={index}
-                style={{ display: 'flex', justifyContent: 'center' }}
-              >
-                <Button
-                  onClick={() => navigate(item.path)}
-                  variant="contained"
-                  style={{
-                    width: isMobile ? '90%' : 150,
-                    maxWidth: 300,
-                    height: 150,
-                    borderRadius: 20,
-                    color: 'white',
-                    textTransform: 'none',
-                    boxShadow: '4px 4px 10px rgba(0,0,0,0.5)',
-                    fontSize: 14,
-                    fontWeight: 'bold',
-                    backgroundColor: '#007bff',
-                  }}
-                >
-                  {item.label}
-                </Button>
-              </Grid>
-            ))}
-
-            {/* Botón Inventario */}
+        <Grid container spacing={2} justifyContent="center">
+          {buttons.map((item, index) => (
             <Grid
               item
-              xs={isMobile ? 12 : 6}
+              xs={6}
+              sm={12}
+              key={index}
               style={{ display: 'flex', justifyContent: 'center' }}
             >
               <Button
-                onClick={() => navigate('/inventory')}
+                onClick={() => navigate(item.path)}
                 variant="contained"
                 style={{
-                  width: isMobile ? '90%' : 150,
-                  maxWidth: 300,
-                  height: 150,
-                  borderRadius: 20,
+                  width: isMobile ? '90%' : '150px',
+                  maxWidth: '300px',
+                  height: '150px',
+                  borderRadius: '20px',
                   color: 'white',
                   textTransform: 'none',
                   boxShadow: '4px 4px 10px rgba(0,0,0,0.5)',
-                  fontSize: 14,
+                  fontSize: '14px',
                   fontWeight: 'bold',
                   backgroundColor: '#007bff',
                 }}
               >
-                Inventario
+                {item.label}
               </Button>
             </Grid>
-          </Grid>
-        </div>
+          ))}
 
-        {/* Botón cerrar sesión abajo */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: isMobile ? 20 : 0,
-          }}
-        >
-          <Tooltip title="Cerrar sesión">
-            <IconButton
-              onClick={handleLogout}
+          {/* Botón cerrar sesión */}
+          <Grid
+            item
+            xs={6}
+            sm={12}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: isMobile ? '20px' : 0,
+            }}
+          >
+            <Tooltip title="Cerrar sesión">
+              <IconButton
+                onClick={handleLogout}
+                style={{
+                  width: isMobile ? '90%' : '150px',
+                  height: '150px',
+                  borderRadius: '20px',
+                  color: 'white',
+                  backgroundColor: '#dc3545',
+                  boxShadow: '4px 4px 10px rgba(0,0,0,0.5)',
+                }}
+              >
+                <LogoutIcon fontSize="large" />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+
+          {/* Botón Inventario */}
+          <Grid
+            item
+            xs={6}
+            sm={12}
+            style={{ display: 'flex', justifyContent: 'center' }}
+          >
+            <Button
+              onClick={() => navigate('/inventory')}
+              variant="contained"
               style={{
-                width: isMobile ? '90%' : 150,
-                height: 150,
-                borderRadius: 20,
+                width: isMobile ? '90%' : '150px',
+                maxWidth: '300px',
+                height: '150px',
+                borderRadius: '20px',
                 color: 'white',
-                backgroundColor: '#dc3545',
+                textTransform: 'none',
                 boxShadow: '4px 4px 10px rgba(0,0,0,0.5)',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                backgroundColor: '#007bff',
               }}
             >
-              <LogoutIcon fontSize="large" />
-            </IconButton>
-          </Tooltip>
-        </div>
+              Inventario
+            </Button>
+          </Grid>
+        </Grid>
       </div>
     </div>
   );
