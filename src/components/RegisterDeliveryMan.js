@@ -16,8 +16,14 @@ const RegisterDeliveryMan = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [editingId, setEditingId] = useState(null);
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
+if (!API_URL) {
+  throw new Error("La variable de entorno REACT_APP_API_URL no está definida");
+}
+
   useEffect(() => {
-    fetch("http://localhost:5000/api/deliverymen/list")
+    fetch(`${API_URL}/api/deliverymen/list`)
       .then(response => response.json())
       .then(data => setDeliveryMen(data))
       .catch(error => console.error("Error al obtener los repartidores:", error));
@@ -61,13 +67,13 @@ const RegisterDeliveryMan = () => {
     try {
       let response;
       if (editingId) {
-        response = await fetch(`http://localhost:5000/api/deliverymen/update/${editingId}`, {
+        response = await fetch(`${API_URL}/api/deliverymen/update/${editingId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(requestBody),
         });
       } else {
-        response = await fetch("http://localhost:5000/api/deliverymen/register", {
+       response = await fetch(`${API_URL}/api/deliverymen/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(requestBody),
@@ -118,7 +124,7 @@ const RegisterDeliveryMan = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/deliverymen/delete/${id}`, {
+      const response = await fetch(`${API_URL}/api/deliverymen/delete/${id}`, {
         method: "DELETE",
       });
 
